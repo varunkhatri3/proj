@@ -1,0 +1,105 @@
+# ===== Python =====
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+__pypackages__/
+
+# Python cache / compiled
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+*.egg
+.wheel/
+
+# Installer / dependency files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Test / coverage
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+htmlcov/
+.tox/
+
+# Type checkers / caches
+.mypy_cache/
+.pyre/
+.pytype/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment / secrets
+.env
+.env.* 
+.envrc
+secrets.* 
+
+# Uvicorn / gunicorn / logs
+uvicorn.log
+gunicorn.log
+
+# ===== Node / JavaScript =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+/dist
+/build
+.next
+out/
+.cache/
+.vite
+.eslintcache
+
+# TypeScript
+*.tsbuildinfo
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+Icon?
+
+# ===== Misc =====
+*.log
+*.sqlite3
+*.db
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# JetBrains folder for webpack / caches etc.
+.idea/
+
+# macOS Finder tags
+*.localized
+
+# OneDrive / Windows
+~$*
+*.lnk
+
+# Ignore generated PDFs/artifacts if any
+*.pdf
+
+# Keep this file tracked
+!.gitignore
