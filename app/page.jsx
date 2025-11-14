@@ -7,6 +7,7 @@ export default function Home() {
   const [extractedText, setExtractedText] = useState("");
   const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const validateFile = (file) => {
     if (!file) {
@@ -27,6 +28,45 @@ export default function Home() {
     }
 
     return true;
+  };
+
+  const handleFileSelect = (selectedFile) => {
+    if (validateFile(selectedFile)) {
+      setFile(selectedFile);
+      if (selectedFile.type.startsWith("image/")) {
+        setPreview(URL.createObjectURL(selectedFile));
+      } else {
+        setPreview(null);
+      }
+    }
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      handleFileSelect(droppedFile);
+    }
   };
 
   const handleAnalyze = async () => {
@@ -74,7 +114,7 @@ export default function Home() {
 
       setAnalysis(analyzeData.analysis);
     } catch (err) {
-      alert("Something went wrong.");
+      alert("Something went wrong: " + err.message);
     }
 
     setLoading(false);
@@ -87,19 +127,11 @@ export default function Home() {
       <h2 className="section-title">Upload File</h2>
 
       <div
-        className="upload-box"
-        onDragEnter={(e) => e.preventDefault()}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          const dropped = e.dataTransfer.files[0];
-          if (validateFile(dropped)) {
-            setFile(dropped);
-            if (dropped.type.startsWith("image/"))
-              setPreview(URL.createObjectURL(dropped));
-            else setPreview(null);
-          }
-        }}
+        className={`upload-box ${isDragging ? 'dragging' : ''}`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
         <b>Drag & Drop File</b>
         <p style={{ color: "#777" }}>PDF or Image</p>
@@ -110,23 +142,26 @@ export default function Home() {
           accept=".pdf, image/*"
           onChange={(e) => {
             const uploaded = e.target.files[0];
-            if (validateFile(uploaded)) {
-              setFile(uploaded);
-              if (uploaded.type.startsWith("image/"))
-                setPreview(URL.createObjectURL(uploaded));
-              else setPreview(null);
+            if (uploaded) {
+              handleFileSelect(uploaded);
             }
           }}
         />
+
+        {file && (
+          <p style={{ marginTop: 10, color: "#2563eb", fontWeight: "bold" }}>
+            ✓ {file.name}
+          </p>
+        )}
 
         <p style={{ marginTop: 10, color: "green" }}>
           Allowed: PDF, PNG, JPG, JPEG
         </p>
       </div>
 
-      {preview && <img src={preview} className="preview-img" />}
+      {preview && <img src={preview} alt="Preview" className="preview-img" />}
 
-      <button className="btn" onClick={handleAnalyze}>
+      <button className="btn" onClick={handleAnalyze} disabled={loading}>
         {loading ? "Analyzing..." : "Analyze Content"}
       </button>
 

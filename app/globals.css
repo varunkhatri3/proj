@@ -42,6 +42,13 @@ body {
   border-color: black;
 }
 
+.upload-box.dragging {
+  background: #e0f2fe;
+  border-color: #2563eb;
+  border-style: solid;
+  transform: scale(1.02);
+}
+
 .file-input {
   display: block;
   margin-top: 15px;
@@ -49,12 +56,14 @@ body {
   padding: 12px;
   border-radius: 10px;
   border: 1px solid #ccc;
+  cursor: pointer;
 }
 
 .preview-img {
   margin-top: 20px;
   width: 100%;
   border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .btn {
@@ -70,8 +79,15 @@ body {
   transition: 0.3s ease;
 }
 
-.btn:hover {
+.btn:hover:not(:disabled) {
   background: #222;
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  background: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .result-box {
@@ -81,6 +97,7 @@ body {
   border-radius: 12px;
   white-space: pre-wrap;
   font-size: 14px;
+  border-left: 4px solid #2563eb;
 }
 
 .extract-box {
@@ -90,4 +107,7 @@ body {
   border-radius: 12px;
   white-space: pre-wrap;
   font-size: 14px;
+  border-left: 4px solid #666;
+  max-height: 300px;
+  overflow-y: auto;
 }

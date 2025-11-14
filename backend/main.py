@@ -10,9 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
+# Update this path to match your Tesseract installation
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-
 
 app = FastAPI()
 
@@ -21,10 +20,10 @@ app = FastAPI()
 # -----------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],       # allow all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],       # allow all methods
-    allow_headers=["*"],       # allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
@@ -79,19 +78,46 @@ Text:
 {text}
 """
 
+    # Gemini API endpoint with current stable model (Gemini 2.5 Flash)
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
 
-    response = requests.post(
-        url,
-        json={"contents": [{"parts": [{"text": prompt}]}]},
-        headers={"Content-Type": "application/json"}
-    )
-
-    data = response.json()
-
     try:
-        result = data["candidates"][0]["content"]["parts"][0]["text"]
-    except:
-        return {"error": "Gemini API failed to analyze text", "raw": data}
+        response = requests.post(
+            url,
+            json={
+                "contents": [{
+                    "parts": [{"text": prompt}]
+                }]
+            },
+            headers={"Content-Type": "application/json"},
+            timeout=30
+        )
 
-    return {"analysis": result}
+        # Check if request was successful
+        if response.status_code != 200:
+            return {
+                "error": f"Gemini API error: {response.status_code}",
+                "details": response.text
+            }
+
+        data = response.json()
+
+        # Extract the result safely
+        if "candidates" in data and len(data["candidates"]) > 0:
+            candidate = data["candidates"][0]
+            if "content" in candidate and "parts" in candidate["content"]:
+                result = candidate["content"]["parts"][0]["text"]
+                return {"analysis": result}
+        
+        # If we couldn't extract the result, return the raw response for debugging
+        return {
+            "error": "Unexpected API response format",
+            "raw": data
+        }
+
+    except requests.exceptions.Timeout:
+        return {"error": "Request to Gemini API timed out"}
+    except requests.exceptions.RequestException as e:
+        return {"error": f"Request failed: {str(e)}"}
+    except Exception as e:
+        return {"error": f"Error processing response: {str(e)}"}
