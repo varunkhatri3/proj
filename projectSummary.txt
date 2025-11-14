@@ -1,0 +1,31 @@
+AI CONTENT ANALYZER - PROJECT EXPLANATION
+
+This is a simple web application that reads documents and tells you what's in them.
+
+HOW IT WORKS:
+
+1. You upload a PDF file or an image (like a screenshot of text)
+2. The app extracts all the text from it
+3. It sends that text to Google's AI (Gemini)
+4. The AI reads it and gives you a short summary
+
+TECHNICAL PARTS:
+
+Frontend (what you see):
+- Built with Next.js and React
+- Has a drag-and-drop area where you upload files
+- Shows you the extracted text and the AI summary
+- Clean interface with visual feedback when you drag files
+
+Backend (what does the work):
+- Python with FastAPI framework
+- Uses pdfplumber library to read PDFs and extract text
+- Uses Tesseract OCR to read text from images and screenshots
+- Connects to Google Gemini API for generating the AI summary
+- Handles file validation and error management
+
+WHY THIS IS USEFUL:
+
+Instead of reading a long document, you can just upload it and get the main points in a few seconds. Good for research papers, articles, receipts, scanned documents, or any text you need to understand quickly.
+
+The whole thing runs locally on your computer - frontend on port 3000, backend on port 8000. You need a free Gemini API key to make it work.
