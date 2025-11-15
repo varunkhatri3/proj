@@ -45,12 +45,12 @@ Runs on `http://localhost:3000`
 ```bash
 cd backend
 
-# Make a virtual environment (optional)
+# Make a virtual environment 
 python -m venv venv
 venv\Scripts\activate  # Windows
 source venv/bin/activate  # Mac/Linux
 
-# Install stuff
+# Install requirements
 pip install -r requirements.txt
 ```
 

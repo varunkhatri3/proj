@@ -1,4 +1,4 @@
-AI CONTENT ANALYZER - PROJECT EXPLANATION
+SOCIAL MEDIA SUMMARY ANALYZER - PROJECT EXPLANATION
 
 This is a simple web application that reads documents and tells you what's in them.
 
@@ -28,4 +28,4 @@ WHY THIS IS USEFUL:
 
 Instead of reading a long document, you can just upload it and get the main points in a few seconds. Good for research papers, articles, receipts, scanned documents, or any text you need to understand quickly.
 
-The whole thing runs locally on your computer - frontend on port 3000, backend on port 8000. You need a free Gemini API key to make it work.
+The whole thing runs locally on your computer - frontend on port 3000, backend on port 8000. You need a free Gemini API key to make it work.b

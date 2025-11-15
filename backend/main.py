@@ -15,9 +15,8 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 
 app = FastAPI()
 
-# -----------------------------
 # Allow Next.js frontend
-# -----------------------------
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,16 +25,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# -----------------------------
 # ROUTE 1: Extract text from file
-# -----------------------------
+
 @app.post("/extract")
 async def extract(file: UploadFile = File(...)):
     file_bytes = await file.read()
     content_type = file.content_type
 
-    # --- PDF Extraction ---
+    #   PDF Extraction
     if content_type == "application/pdf":
         with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
             text = ""
@@ -44,7 +41,7 @@ async def extract(file: UploadFile = File(...)):
                 text += page_text + "\n"
         return {"text": text}
 
-    # --- IMAGE OCR ---
+    # --- Image Extraction ---
     elif content_type.startswith("image/"):
         image = Image.open(io.BytesIO(file_bytes))
         text = pytesseract.image_to_string(image)
@@ -53,10 +50,7 @@ async def extract(file: UploadFile = File(...)):
     else:
         return {"error": "Unsupported file type"}
 
-
-# -----------------------------
 # ROUTE 2: Analyze text using Gemini API
-# -----------------------------
 @app.post("/analyze")
 async def analyze(payload: dict):
     text = payload.get("text", "")
@@ -93,7 +87,7 @@ Text:
             timeout=30
         )
 
-        # Check if request was successful
+        # Checking if request was successful
         if response.status_code != 200:
             return {
                 "error": f"Gemini API error: {response.status_code}",
